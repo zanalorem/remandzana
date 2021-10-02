@@ -1,0 +1,198 @@
+:root {
+    --color-alice: #1ccbf2;
+    --color-bob: #ff7b8e;
+    --color-charlie: #83f083;
+    --color-question: orange;
+    --frame-margin: 5px;
+    --nav-height: 50px;
+    --nav-border-size: 1px;
+    --color-connected: #90ee90;
+    --color-disconnected: #ff8b8b;
+    --circle-size: 10px;
+    --circle-container-size: 24px;
+    --margin-mobile: 10px;
+}
+#send {
+    border: none;
+    height: 64px;
+    width: 100%;
+    overflow: hidden;
+}
+#lines {
+    display: flex;
+    flex-direction: column-reverse;
+    border: 2px solid #4c4c4c;
+    margin: 0px var(--frame-margin);
+}
+.line {
+    padding: 8px 15px;
+}
+div.line:nth-of-type(2n) {
+    background-color: #333333;
+}
+div.line:nth-of-type(2n+1) {
+    background-color: #494949;
+}
+.system {
+    white-space: pre-wrap;
+    font-family: monospace, monospace;
+}
+.sender {
+    float: left;
+    margin-right: 12px;
+}
+.message {
+    overflow-wrap: anywhere;
+}
+.name {
+    font-weight: bold;
+    font-family: sans-serif;
+}
+.you {
+    font-variant: all-petite-caps;
+}
+.alice {
+    color: var(--color-alice);
+}
+.bob {
+    color: var(--color-bob);
+}
+.charlie {
+    color: var(--color-charlie);
+}
+.question {
+    color: var(--color-question);
+    font-weight: bold;
+}
+#nav {
+    display: flex;
+    background-color: #616161;
+    border-bottom: var(--nav-border-size) solid #757575;
+    height: var(--nav-height);
+    padding: 0px 12px;
+}
+#nav > .flex-center {
+    flex-direction: row;
+}
+#nav > .flex-right {
+    align-items: normal;
+}
+#nav-list {
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+}
+#nav-list > .nav-item {
+    z-index: 0;
+}
+#modes {
+    cursor: default;
+}
+#modes, #hide-modes {
+    justify-content: center;
+}
+#modes:target, #hide-modes {
+    display: none;
+}
+#modes:target + #hide-modes {
+    display: flex;
+}
+#modes:target ~ #nav-list {
+    visibility: visible;
+}
+.nav-item {
+    background-color: #3c3c3c;
+    padding: 0px 18px;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.nav-item:hover, .nav-item:focus {
+    background-color: #515151;
+}
+/* heartbeat message */
+#lines > b {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    height: var(--footer-height);
+    width: var(--footer-height);
+    background-color: var(--footer-background-color);
+    border-radius: 3px;
+    animation: widen 7s step-end forwards;
+}
+#lines > b:not(:last-of-type) {
+    display: none;
+}
+/* connected mark */
+#lines > b > b {
+    display: block;
+    position: relative;
+    top: calc((var(--footer-height) - var(--circle-container-size)) / 2);
+    left: calc((var(--footer-height) - var(--circle-container-size)) / 2);
+    height: var(--circle-container-size);
+    width: var(--circle-container-size);
+    animation: rotate 3s linear infinite, vanish 7s step-end forwards;
+}
+#lines > b > b > b {
+    display: block;
+    height: var(--circle-size);
+    width: var(--circle-size);
+    border-radius: 50%;
+    background-color: var(--color-connected);
+    animation: redden 4s ease-in 3s forwards;
+}
+/* disconnected mark */
+#lines > b::after {
+    content: "DISCONNECTED";
+    color: var(--color-disconnected);
+    font-size: 23px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: var(--footer-padding-x);
+    padding-right: var(--footer-padding-x);
+    animation: materialize 7s step-end forwards;
+}
+@keyframes rotate {
+    from {
+        transform: rotate(-135deg);
+    }
+    to {
+        transform: rotate(225deg);
+    }
+}
+@keyframes vanish {
+    to {
+        opacity: 0;
+        height: 0px;
+    }
+}
+@keyframes materialize {
+    from {
+        opacity: 0;
+        height: 0px;
+    }
+    to {
+        opacity: 1;
+        height: 50px;
+    }
+}
+@keyframes redden {
+    to {
+        background-color: var(--color-disconnected);
+    }
+}
+@keyframes widen {
+    to {
+        width: auto;
+    }
+}
+@media screen and (min-width: 800px) {
+    #modes:hover ~ #nav-list,
+    #hide-modes:hover ~ #nav-list,
+    #nav-list:hover {
+        visibility: visible;
+    }
+}

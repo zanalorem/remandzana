@@ -1,0 +1,23 @@
+:root {
+    --frame-margin: 5px;
+}
+body {
+    margin: var(--frame-margin);
+    font-size: 30px;
+}
+#form {
+    display: flex;
+}
+#message {
+    flex-basis: 100%;
+    min-width: 0px;
+    font-size: inherit;
+}
+#button {
+    font-size: inherit;
+    margin-left: 6px;
+    padding: 5px 12px;
+}
+#stylesheet-blocked {
+    display: none;
+}
