@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block csp %}
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src {% if nonce %}'nonce-{{ nonce }}'{% else %}'self'{% endif %}">
+{% endblock %}
+{% block head %}
+    <link {% if nonce %}nonce="{{ nonce }}" {% endif %}href="{{ url_for('static', filename='send.css') }}" rel="stylesheet">
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block main %}
+    <article id="stylesheet-blocked">
+        <mark>The stylesheet failed to load. This probably means that your browser is caching
+            parts of this page.
+        </mark>
+        <br>
+        <mark>Click one of the navbar links to start over. &uparrow;</mark>
+        <br><br>
+    </article>
+    <form action="{{ url_for('chat.send') }}" id="form" method="post">
+        {{ form.clavis() }}
+        {{ form.timestamp() }}
+        {{ form.setup(value=form.setup.data | tojson) }}
+        {{ form.salt() }}
+        {{ form.signature() }}
+        {{ form.message(autofocus=False, maxlength=500, placeholder=placeholder, spellcheck="true") }}
+        <button id="button">Send</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='etc.css') }}" rel="stylesheet">
+{% endblock %}
+{% block main %}
+    {% include "back.html" %}
+    <div id="container">
+        <h2>About</h2>
+        <section>
+            <p>
+                Remandzana is an open source chat application for the web.
+                Development happens at <a href="https://github.com/zanalorem/remandzana/" referrerpolicy="no-referrer" rel="noreferrer" target="_blank">https://github.com/zanalorem/remandzana/</a>.
+            </p>
+        </section>
+        <section>
+            <h3>Modes</h3>
+            <p>Remandzana supports four chat modes.
+                <ul>
+                    <li>
+                        <h4>Two-person mode</h4>
+                        <p>The simplest mode. Conversations start between any two people in the lobby.</p>
+                    </li>
+                    <li>
+                        <h4>Three-person mode</h4>
+                        <p>The same as above but for three people.</p>
+                    </li>
+                    <li>
+                        <h4>Question mode</h4>
+                        <p>The same as Omegle's spy mode. Conversations start between three people: one
+                            person who <i>submits</i> a question and two others who <i>discuss</i> a
+                            question. The author of the question observes the discussion.
+                        </p>
+                    </li>
+                    <li>
+                        <h4>Global chat</h4>
+                        <p>Ongoing global chat. Any number of people can join.</p>
+                    </li>
+                </ul>
+            </p>
+        </section>
+    </div>
+{% endblock %}

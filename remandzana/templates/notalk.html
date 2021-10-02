@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="{{ url_for('static', filename='send.css') }}" rel="stylesheet">
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block main %}
+    <div id="form">
+        <input id="message" placeholder="{{ placeholder }}" disabled>
+    </div>
+{% endblock %}

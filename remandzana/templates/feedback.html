@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='etc.css') }}" rel="stylesheet">
+{% endblock %}
+{% block main %}
+    {% include "back.html" %}
+    <div id="container">
+    <h2>Feedback</h2>
+        <section id="feedback-form">
+            <form id="form" method="post">
+                {{ form.message(autofocus=True, maxlen=500, spellcheck="true") }}
+                {{ form.salt() }}
+                {{ form.signature() }}
+                <button id="button">Submit</button>
+            </form>
+        </section>
+        <section id="feedback-list">
+            {% for feedback in feedbacks | selectattr("visible") %}
+                <article class="feedback{% if feedback.operator %} operator{% endif %}">
+                    <header class="feedback-header">
+                        {% if feedback.operator %}<strong>Operator Notice</strong>{% endif %}
+                        <time>{{ feedback.datetime }}</time>
+                    </header>
+                    <section class="feedback-message">{{ feedback.message }}</section>
+                    {% if feedback.reply != None %}
+                        <section class="feedback-reply">{{ feedback.reply }}</section>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

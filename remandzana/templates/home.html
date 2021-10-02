@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='etc.css') }}" rel="stylesheet">
+{% endblock %}
+{% block main %}
+    <div id="container">
+        <h1>Remandzana</h1>
+        <section class="links" id="primary">
+            <a href="{{ url_for('chat.two') }}">
+                <div class="button button-red">two-person chat</div>
+            </a>
+            <a href="{{ url_for('chat.any_') }}">
+                <div class="button button-cyan">any mode</div>
+            </a>
+        </section>
+        <h3 class="section-header">Other modes</h3>
+        <section class="links" id="secondary">
+            <a href="{{ url_for('chat.three') }}">
+                <div class="button button-purple">three-person chat</div>
+            </a>
+            <a href="{{ url_for('chat.question') }}">
+                <div class="button button-purple">question mode</div>
+            </a>
+            <a href="{{ url_for('chat.global_') }}">
+                <div class="button button-purple">global chat</div>
+            </a>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'self' 'unsafe-inline'; frame-src 'self';">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='chat.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav id="nav">
+        <div class="flex-left">
+            <a class="nav-item" href="{{ url_for('main.home') }}">Home</a>
+        </div>
+        <div class="flex-center">
+            {% if first_navbar_link %}
+                <a class="nav-item" href="{{ url_for(first_navbar_link.route) }}">
+                    {% if "mobile" in first_navbar_link or "desktop" in first_navbar_link %}
+                        <div class="mobile">{{ first_navbar_link.mobile }}</div>
+                        <div class="desktop">{{ first_navbar_link.desktop }}</div>
+                    {% else %}
+                        <div>{{ first_navbar_link.text }}</div>
+                    {% endif %}
+                </a>
+            {% endif %}
+            {% if second_navbar_link %}
+                <a class="nav-item ml-15px" href="{{ url_for(second_navbar_link.route) }}">
+                    {% if "mobile" in first_navbar_link or "desktop" in first_navbar_link %}
+                        <div class="mobile">{{ second_navbar_link.mobile }}</div>
+                        <div class="desktop">{{ second_navbar_link.desktop }}</div>
+                    {% else %}
+                        <div>{{ second_navbar_link.text }}</div>
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
+        <div class="flex-right">
+            <div>
+                <a class="nav-item" href="#modes" id="modes">▶</a>
+                <a class="nav-item" href="#" id="hide-modes">▼</a>
+                <div id="nav-list">
+                    <a class="nav-item" href="{{ url_for('chat.two') }}" tabindex="0" target="_blank">2P</a>
+                    <a class="nav-item" href="{{ url_for('chat.three') }}" tabindex="0" target="_blank">3P</a>
+                    <a class="nav-item" href="{{ url_for('chat.question') }}" tabindex="0" target="_blank">Q?</a>
+                    <a class="nav-item" href="{{ url_for('chat.global_') }}" tabindex="0" target="_blank"><var>n</var>P</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% include "footer.html" %}
+    <main>
+        <iframe id="send" scrolling="no" srcdoc="{{ srcdoc }}" tabindex="1"></iframe>
+        <article id="lines">

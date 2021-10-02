@@ -1,0 +1,15 @@
+<footer id="footer">
+    <div class="flex-left">
+        {% if not hide_footer_about_link %}
+            <a href="{{ url_for('main.about') }}">about</a>
+        {% endif %}
+    </div>
+    <small class="flex-center">
+        <a class="mb-2px" href="https://github.com/zanalorem/remandzana" referrerpolicy="no-referrer" rel="noreferrer" target="_blank">remandzana 0.1.0</a>
+        <small>{{ nb_messages }} messsage{% if nb_messages != 1 %}s{% endif %} today</small>
+    </small>
+    <div class="flex-right">
+        <a class="mobile" href="{{ url_for('main.view_feedback') }}"{% if open_feedback_in_new_tab %} target="_blank"{% endif %}title="feedback">💬</a>
+        <a class="desktop" href="{{ url_for('main.view_feedback') }}"{% if open_feedback_in_new_tab %} target="_blank"{% endif %}>feedback</a>
+    </div>
+</footer>
