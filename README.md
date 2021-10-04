@@ -50,7 +50,7 @@ Remandzana is new so contributions/issues/etc. are welcome.
 
 ## Documentation
 
-Conversation logic is handled by three classes: [`Person`](/remandzana/models/person.py), [`Lobby`](/remandzana/models/lobby/__init__.py), and [`Room`](/remandzana/models/room.py). Lobbies are responsible for creating rooms and admitting people to rooms. The chat modes have one lobby class each (e.g. [`TwoLobby`](/remandzana/models/lobby/two.py) is the lobby for two-person mode). Lobbies are instantiated once in [lobbies.py](/remandzana/chat/lobbies.py).
+Conversation logic is handled by three classes: [`Person`](/remandzana/models/person.py), [`Lobby`](/remandzana/models/lobby/__init__.py), and [`Room`](/remandzana/models/room.py). Lobbies are responsible for creating rooms and admitting people to rooms. The chat modes have one lobby class each (e.g. [`TwoLobby`](/remandzana/models/lobby/two.py) is the lobby for two-person mode). Lobbies are instantiated once in [lobbies.py](/remandzana/lobbies.py).
 
 For example two-person mode works like this:
  * Somebody makes a GET request to `/two`. A new `Person` is added to the `TwoLobby`.
@@ -62,7 +62,7 @@ This is the basic procedure for creating rooms. It works for the simple two-pers
 
 > `TwoLobby` and `ThreeLobby` forget about rooms as soon as they create them. This makes sense as you wouldn't expect a new person to be able to join an in-progress conversation in these modes. In global chat however, you would expect this because there is only one room. To allow for this lobbies can optionally keep track of what rooms they have created and try to admit new people to those rooms first before trying to create any new ones. (Only `GlobalLobby` does this.)
 
-> Question mode requires three people, but one of them (the question author) isn't allowed to speak in the room, and before the room can be created they need to have submitted a question. This is accomplished using [roles](/models/role.py). The question author has the `QUESTION` role which requires some setup to be done before the lobby will consider them _ready_.
+> Question mode requires three people, but one of them (the question author) isn't allowed to speak in the room, and before the room can be created they need to have submitted a question. This is accomplished using [roles](/remandzana/models/role.py). The question author has the `QUESTION` role which requires some setup to be done before the lobby will consider them _ready_.
 
 Once a room exists, received messages are relayed to members of the room.
 
