@@ -55,5 +55,6 @@ async def submit_feedback():
 async def about():
     return await render_template(
         "about.html",
+        lobbies=current_app.lobbies.values(),
         nb_messages=current_app.metrics.nb_messages()
     )
