@@ -7,6 +7,7 @@ APPEARANCE_DATA = [("Alice", "alice"), ("Bob", "bob"), ("Charlie", "charlie")]
 
 
 class ThreeLobby(Lobby):
+    MODE_NAME = "Three-person mode"
     _ROLES_REQUIRED = {Role.NONE: 3}
 
     @staticmethod
