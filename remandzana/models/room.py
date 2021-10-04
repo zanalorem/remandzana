@@ -7,12 +7,14 @@ from ..exceptions import RoomClosed
 
 
 class Room:
-    def __init__(self, appearance, command, command_prefix, on_exit):
+    def __init__(self, appearance, command, command_prefix, on_exit, policies):
         self._people = OrderedDict()
         self.appearance = appearance
         self.command = command
         self.command_prefix = command_prefix
         self.on_exit = on_exit
+        self.policies = policies
+
         self._closed = False
         self._lobbies = set()
 
@@ -62,7 +64,7 @@ class Room:
         try:
             self._people.pop(person.clavis)
         except KeyError:
-            pass
+            return
         await self.on_exit(self, person)
 
     async def broadcast(self, message, to=None, exclude=None):
@@ -96,3 +98,11 @@ class Room:
 
         for person in filter(match, self.people):
             await person.feed.put(message)
+
+    async def apply_censorship_policies(self, person, message):
+        for policy in self.policies:
+            if policy._check(message):
+                nb_violations = person._violations.get(policy, 0) + 1
+                person._violations[policy] = nb_violations
+                consequence = policy.consequence_after(nb_violations)
+                await consequence(policy, person)
