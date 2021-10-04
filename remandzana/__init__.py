@@ -18,6 +18,20 @@ def create_app():
     from .lobbies import ALL_LOBBIES
     app.lobbies = ALL_LOBBIES
 
+    from .models.censorship.ahmia import Ahmia
+    if any(
+        isinstance(policy, Ahmia)
+        for lobby in app.lobbies.values()
+        for policy in lobby.policies
+    ):
+        assert os.path.isfile(app.config["REMANDZANA_AHMIA_LOCATION"]), \
+            (
+                "Ahmia blacklist not found; "
+                f"expected here: {app.config['REMANDZANA_AHMIA_LOCATION']!r}. "
+                "Get it from https://ahmia.fi/blacklist/ "
+                "(make sure every hash is on a new line)."
+            )
+
     from .main import bp as main_bp
     from .chat import bp as chat_bp
     app.register_blueprint(main_bp)
