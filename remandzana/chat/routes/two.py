@@ -1,11 +1,12 @@
-from ..lobbies import ALL_LOBBIES
+from quart import current_app
+
 from ..utils import chat
 from ...models.role import Role
 
 
 async def two():
     return await chat(
-        ALL_LOBBIES["two"],
+        current_app.lobbies["two"],
         role=Role.NONE,
         first_navbar_link={
             "route": "chat.two",
