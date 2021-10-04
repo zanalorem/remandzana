@@ -8,6 +8,7 @@ APPEARANCE_DATA = [("Alice", "alice"), ("Bob", "bob")]
 
 
 class QuestionLobby(Lobby):
+    MODE_NAME = "Question mode"
     _ROLES_REQUIRED = {Role.NONE: 2, Role.QUESTION: 1}
 
     @staticmethod
@@ -38,6 +39,17 @@ class QuestionLobby(Lobby):
     async def _setup_role(self, person, question):
         if person.clavis not in self._people:
             raise PersonNotInLobby(person, self)
+
+        for policy in self.policies:
+            if policy._check(question):
+                message = {
+                    "sender": None,
+                    "body": f"Question rejected ({policy.REASON}).",
+                    "event": "_setup_role"
+                }
+                await person.feed.put(message)
+                return False, "Ask a question..."
+
         messages = [
             {
                 "sender": None,
@@ -58,7 +70,7 @@ class QuestionLobby(Lobby):
         person.extra["question"] = question
         await self._create_room()
 
-        return "Your question was submitted."
+        return True, "Your question was submitted."
 
     def _person_is_ready(self, person):
         if person.role == Role.QUESTION:
