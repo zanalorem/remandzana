@@ -5,6 +5,7 @@ from ...models.role import Role
 
 
 class TwoLobby(Lobby):
+    MODE_NAME = "Two-person mode"
     _ROLES_REQUIRED = {Role.NONE: 2}
 
     @staticmethod

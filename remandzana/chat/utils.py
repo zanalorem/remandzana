@@ -1,8 +1,9 @@
 import time
 import random
 import secrets
+from functools import wraps
 
-from quart import render_template, make_response, current_app
+from quart import render_template, make_response, current_app, request
 
 from ..models.person import Person
 from ..models.role import Role
@@ -18,9 +19,16 @@ async def handle_role_setup(person, text):
     # It doesn't make much sense right now for someone to be in multiple
     # lobbies while a role setup is happening. The use of `.lobby` here
     # asserts that the person is in exactly 1 lobby.
-    placeholder = await person.lobby._setup_role(person, text)
-    person.silenced = True
-    return await render_template("notalk.html", placeholder=placeholder)
+    accepted, placeholder = await person.lobby._setup_role(person, text)
+    if accepted:
+        person.silenced = True
+        return await render_template("notalk.html", placeholder=placeholder)
+    return await render_template(
+        "send.html",
+        form=make_form(person=person, role_setup=True),
+        placeholder=placeholder,
+        value=text
+    )
 
 
 def make_form(person, role_setup=False):
@@ -79,3 +87,15 @@ async def chat(*lobbies, role=None, role_setup=False,
     response = await make_response(person.readlines(preamble=preamble))
     response.timeout = None
     return response
+
+
+def enforce_exile(function):
+    @wraps(function)
+    async def wrapper(*args, **kwargs):
+        if request.cookies.get("exiled"):
+            return await render_template(
+                "exiled.html",
+                nb_messages=current_app.metrics.nb_messages()
+            ), 403
+        return await function(*args, **kwargs)
+    return wrapper

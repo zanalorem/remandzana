@@ -6,6 +6,7 @@ from .three import three
 from .question import question, question_ask, question_discuss
 from .any import any_
 from .global_ import global_
+from ..utils import enforce_exile
 
 
 bp = Blueprint("chat", __name__)
@@ -32,4 +33,4 @@ for r in common_routes:
     bp.add_url_rule(**r)
 
 for rule, view_func in routes:
-    bp.add_url_rule(rule=rule, view_func=view_func)
+    bp.add_url_rule(rule=rule, view_func=enforce_exile(view_func))

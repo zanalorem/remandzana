@@ -22,7 +22,7 @@
         {{ form.setup(value=form.setup.data | tojson) }}
         {{ form.salt() }}
         {{ form.signature() }}
-        {{ form.message(autofocus=False, maxlength=500, placeholder=placeholder, spellcheck="true") }}
+        {{ form.message(autofocus=False, maxlength=500, placeholder=placeholder, spellcheck="true", value=value) }}
         <button id="button">Send</button>
     </form>
 {% endblock %}

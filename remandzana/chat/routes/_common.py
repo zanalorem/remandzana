@@ -1,12 +1,13 @@
 import operator
 
-from quart import current_app, render_template, request, abort
+from quart import current_app, render_template, request, abort, make_response
 
-from ..lobbies import ALL_LOBBIES
 from ..utils import make_form, handle_role_setup
 from ...models.person import Person
 from ...forms import Send
 from ...auth import requires_authentication
+from ...exceptions import CensorshipPolicyViolation
+from ...exceptions import CensorshipKick, CensorshipExile
 
 
 async def send():
@@ -14,29 +15,73 @@ async def send():
     if form.validate():
         person = form.clavis.person
         body = form.message.data
+
         # request from a silenced person
         if person.silenced:
             return await abort(403)
+
         # setup message, e.g. submitting a question
         if form.setup.data:
             return await handle_role_setup(person, form.message.data)
+
         # room command
         elif person.room and person.room.is_command(body):
             await person.room.command(person.room, person, body)
-            return await render_template("send.html", form=make_form(person))
+            return await render_template(
+                "send.html",
+                form=make_form(person)
+            )
+
+        # regular chat message, person not in a room
+        elif person.room is None:
+            await person.warn()
+            return await render_template(
+                "send.html",
+                form=make_form(person),
+                value=body
+            )
+
         # regular chat message
         else:
             message = {"sender": person, "body": body}
-            if person.room is None:
-                await person.warn(message)
-            else:
-                await person.room.broadcast(message)
-                current_app.metrics.record_message()
-            return await render_template("send.html", form=make_form(person))
+            try:
+                await person.room.apply_censorship_policies(person, body)
+            except CensorshipExile:
+                response = await render_template(
+                    "notalk.html",
+                    placeholder="The chat has ended."
+                ), 403
+                response = await make_response(response)
+                response.set_cookie("exiled", "true")
+                return response
+            except CensorshipKick:
+                return await render_template(
+                    "notalk.html",
+                    placeholder="The chat has ended."
+                ), 403
+            except CensorshipPolicyViolation:
+                if person.silenced:
+                    return await render_template(
+                        "notalk.html",
+                        placeholder="The chat has ended."
+                    ), 403
+                return await render_template(
+                    "send.html",
+                    form=make_form(person),
+                    value=body
+                )
+            await person.room.broadcast(message)
+            current_app.metrics.record_message()
+            return await render_template(
+                "send.html",
+                form=make_form(person)
+            )
+
     if "signature" in form.errors or "timestamp" in form.errors:
         return await abort(403)
     if "message" in form.errors:
         return await abort(413)
+
     print("Form failed to validate:", form.errors)
     return await render_template(
         "notalk.html",
@@ -53,7 +98,7 @@ async def panopticon():
             "people": Person._ALL_PEOPLE,
             "lobbies": {
                 lobby.__class__.__name__: lobby
-                for lobby in ALL_LOBBIES.values()
+                for lobby in current_app.lobbies.values()
             },
             "rooms": {
                 person.room._locus: person.room

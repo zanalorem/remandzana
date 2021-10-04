@@ -6,13 +6,15 @@ from ...exceptions import PersonNotWanted
 
 
 class Lobby(abc.ABC):
+    MODE_NAME = NotImplemented
     _ROLES_REQUIRED = NotImplemented
     _CLOSE_ROOM_UPON_CREATION = True
     _ROOM_COMMAND_PREFIX = None
 
-    def __init__(self):
+    def __init__(self, policies=()):
         self._people = OrderedDict()
         self._open_rooms = []
+        self.policies = policies
 
     def __hash__(self):
         return hash(self.__class__.__name__)
@@ -115,7 +117,7 @@ class Lobby(abc.ABC):
         """
         members = []
         roles = {}
-        
+
         # for every person in the lobby who is ready
         for person in filter(self._person_is_ready, self.people):
             n = self._ROLES_REQUIRED.get(person.role, 0) \
@@ -137,7 +139,8 @@ class Lobby(abc.ABC):
             self.room_appearance,
             self.room_command,
             self._ROOM_COMMAND_PREFIX,
-            self._on_room_exit
+            self._on_room_exit,
+            self.policies
         )
         if admit_people:
             # Admit everyone to the room.

@@ -32,6 +32,8 @@ class Person:
         self._deleted = False
         # If True, the person will be deleted as soon as their feed is empty.
         self._abandoned = False
+        # censorship policy violations
+        self._violations = {}
 
         # Ignore system messages caused by these events, e.g. "_on_lobby_join".
         self.ignore_events = set()
@@ -91,7 +93,10 @@ class Person:
     @room.setter
     def room(self, room):
         if self._room is not None:
-            raise ValueError(f"Cannot change room for {self!r}")
+            raise ValueError(
+                f"Cannot change room from {self._room!r} (lobbies: "
+                f"{self._room.lobbies}) to {room!r} (lobbies: "
+                f"{room.lobbies}) for {self!r}")
         else:
             self._room = room
 
@@ -118,7 +123,7 @@ class Person:
             return ""
         return self.room.appearance(self, viewer)
 
-    async def warn(self, message):
+    async def warn(self):
         """Called when this person tries to send a message before they've been
         admitted to a room.
         """
