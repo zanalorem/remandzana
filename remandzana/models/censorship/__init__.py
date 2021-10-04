@@ -62,13 +62,13 @@ class Policy:
 
 
 async def supress(policy, person, index=0):
-    message = {'sender': None, 'body': policy._supress_notice(index)}
+    message = {"sender": None, "body": policy._supress_notice(index)}
     await person.feed.put(message)
     raise CensorshipPolicyViolation(person)
 
 
 async def kick(policy, person, index=0):
-    message = {'sender': None, 'body': policy._kick_notice(index)}
+    message = {"sender": None, "body": policy._kick_notice(index)}
     await person.feed.put(message)
     await person.room.kick(person)
     person.abandon()
@@ -76,7 +76,7 @@ async def kick(policy, person, index=0):
 
 
 async def exile(policy, person, index=0):
-    message = {'sender': None, 'body': policy._exile_notice(index)}
+    message = {"sender": None, "body": policy._exile_notice(index)}
     await person.feed.put(message)
     await person.room.kick(person)
     person.abandon()
