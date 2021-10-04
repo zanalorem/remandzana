@@ -153,12 +153,35 @@ h2 {
     margin: 0 6px 6px 30px;
 }
 
-#feedback-submitted {
+li > h4 {
+    margin: 18px 0 6px 0;
+}
+section > ul > li {
+    margin-top: 8px;
+}
+.consequences {
+    color: #d3d3d3;
+    font-variant: all-petite-caps;
+}
+section > p {
+    margin: 15px 0;
+}
+section > h3 {
+    margin-bottom: 0;
+}
+
+.middle {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    height: calc(100vh - var(--margin-mobile) var(--footer-border-size) - var(--footer-height));
+    height: calc(100vh - var(--margin-mobile) * 2 - var(--footer-border-size) - var(--footer-height));
+}
+.middle > h2 > a {
+    text-decoration: none;
+}
+.middle > h2 > a:hover {
+    text-decoration: underline;
 }
 
 @media screen and (min-width: 800px) {
@@ -171,7 +194,7 @@ h2 {
     #primary {
         margin-bottom: 90px;
     }
-    #feedback-submitted {
+    .middle {
         height: calc(100vh - var(--margin-desktop) * 2 - var(--footer-border-size) - var(--footer-height));
     }
     #feedback-form {
