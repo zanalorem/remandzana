@@ -9,35 +9,58 @@
         <h2>About</h2>
         <section>
             <p>
-                Remandzana is an open source chat application for the web.
+                Remandzana is an open-source random chat application for the web.
                 Development happens at <a href="https://github.com/zanalorem/remandzana/" referrerpolicy="no-referrer" rel="noreferrer" target="_blank">https://github.com/zanalorem/remandzana/</a>.
             </p>
         </section>
         <section>
             <h3>Modes</h3>
-            <p>Remandzana supports four chat modes.
-                <ul>
-                    <li>
-                        <h4>Two-person mode</h4>
-                        <p>The simplest mode. Conversations start between any two people in the lobby.</p>
-                    </li>
-                    <li>
-                        <h4>Three-person mode</h4>
-                        <p>The same as above but for three people.</p>
-                    </li>
-                    <li>
-                        <h4>Question mode</h4>
-                        <p>The same as Omegle's spy mode. Conversations start between three people: one
-                            person who <i>submits</i> a question and two others who <i>discuss</i> a
-                            question. The author of the question observes the discussion.
-                        </p>
-                    </li>
-                    <li>
-                        <h4>Global chat</h4>
-                        <p>Ongoing global chat. Any number of people can join.</p>
-                    </li>
-                </ul>
-            </p>
+            <p>Remandzana supports four chat modes:<p>
+            <ul>
+                <li>
+                    <h4>Two-person mode</h4>
+                    <div>The simplest mode. Conversations start between any two people in the lobby.</div>
+                </li>
+                <li>
+                    <h4>Three-person mode</h4>
+                    <div>The same as above but for three people.</div>
+                </li>
+                <li>
+                    <h4>Question mode</h4>
+                    <div>The same as Omegle's spy mode. Conversations start between three people: one
+                        person who <i>submits</i> a question and two others who <i>discuss</i> a
+                        question. The author of the question observes the discussion.
+                    </div>
+                </li>
+                <li>
+                    <h4>Global chat</h4>
+                    <div>Ongoing global chat. Any number of people can join.</div>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h3>This instance</h3>
+            <p>The following censorship policies are active:</p>
+            <ul>
+                {% for lobby in lobbies %}
+                    <li>{{ lobby.MODE_NAME }}</li>
+                    {% if lobby.policies %}
+                        <ul>
+                            {% for policy in lobby.policies %}
+                                <li>{{ policy.POLICY_NAME }}
+                                    {% for consequence in policy._consequences %}
+                                        {% with nb_times = policy._consequences[consequence] %}
+                                            {% if loop.first %}<span class="consequences">[{% endif %}{{ consequence }}{% if nb_times != 1 %}&times;{{ nb_times }}{% endif %}{% if loop.last %}]</span>{% else %} &rightarrow;{% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <ul><li><i>None</i></li></ul>
+                    {% endif %}
+                {% endfor %}
+            </ul>
         </section>
     </div>
 {% endblock %}
