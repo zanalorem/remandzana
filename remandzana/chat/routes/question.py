@@ -1,13 +1,9 @@
 import secrets
 
-from quart import redirect, url_for
+from quart import current_app, redirect, url_for
 
-from ..lobbies import ALL_LOBBIES
 from ..utils import chat
 from ...models.role import Role
-
-
-q_lobby = ALL_LOBBIES["question"]
 
 
 async def question():
@@ -18,7 +14,7 @@ async def question():
 
 async def question_discuss():
     return await chat(
-        q_lobby,
+        current_app.lobbies["question"],
         role=Role.NONE,
         first_navbar_link={
             "route": "chat.question_discuss",
@@ -33,7 +29,7 @@ async def question_discuss():
 
 async def question_ask():
     return await chat(
-        q_lobby,
+        current_app.lobbies["question"],
         role=Role.QUESTION,
         role_setup=True,
         form_placeholder="Ask a question...",
