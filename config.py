@@ -1,5 +1,5 @@
 MAX_CONTENT_SIZE = 1024
-SECRET_KEY = bytes.fromhex("b9462b5092694df9ba93fb4c539c1c4d397a01773f41e347d9157077d2358f9f")
+SECRET_KEY = NotImplemented
 
 # enable the debug panopticon
 REMANDZANA_DEBUG = True
