@@ -7,23 +7,23 @@ from .models.censorship.urls import URLs
 
 two = TwoLobby(
     policies=[
-        Ahmia().supress(5).kick()
+        # Ahmia().supress(5).kick()
     ]
 )
 three = ThreeLobby(
     policies=[
-        Ahmia().supress(5).kick()
+        # Ahmia().supress(5).kick()
     ]
 )
 question = QuestionLobby(
     policies=[
-        Ahmia().supress(5).kick()
+        # Ahmia().supress(5).kick()
     ]
 )
 global_ = GlobalLobby(
     policies=[
-        Ahmia().supress(3).exile(),
-        URLs().supress(5).kick()
+        # Ahmia().supress(3).exile(),
+        # URLs().supress(5).kick()
     ]
 )
 ALL_LOBBIES = {
