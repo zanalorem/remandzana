@@ -5,6 +5,7 @@ from ..role import Role
 
 
 class GlobalLobby(Lobby):
+    MODE_NAME = "Global chat"
     _ROLES_REQUIRED = {Role.NONE: 1}
     _CLOSE_ROOM_UPON_CREATION = False
     _ROOM_COMMAND_PREFIX = "/"
@@ -97,5 +98,5 @@ class GlobalLobby(Lobby):
             for lobby in room.lobbies:
                 try:
                     lobby._open_rooms.remove(room)
-                except IndexError:
+                except ValueError:
                     pass
