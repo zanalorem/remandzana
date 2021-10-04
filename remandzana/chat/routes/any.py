@@ -1,14 +1,15 @@
-from quart import Markup
+from quart import current_app, Markup
 
-from ..lobbies import ALL_LOBBIES
 from ..utils import chat
 from ...models.role import Role
 
-RANDOM_LOBBIES = [
-    ALL_LOBBIES["two"],
-    ALL_LOBBIES["three"],
-    ALL_LOBBIES["question"]
-]
+
+def lobbies():
+    return (
+        current_app.lobbies["two"],
+        current_app.lobbies["three"],
+        current_app.lobbies["question"]
+    )
 
 
 async def custom_join_message(person):
@@ -18,7 +19,7 @@ async def custom_join_message(person):
 
 async def any_():
     return await chat(
-        *RANDOM_LOBBIES,
+        *lobbies(),
         role=Role.NONE,
         after_person_init=custom_join_message,
         first_navbar_link={
