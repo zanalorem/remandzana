@@ -10,6 +10,13 @@ def create_app():
         app.root_path,
         app.config["REMANDZANA_FEEDBACK_DIRECTORY"]
     )
+    app.config["REMANDZANA_AHMIA_LOCATION"] = os.path.join(
+        app.root_path,
+        app.config["REMANDZANA_AHMIA_LOCATION"]
+    )
+
+    from .lobbies import ALL_LOBBIES
+    app.lobbies = ALL_LOBBIES
 
     from .main import bp as main_bp
     from .chat import bp as chat_bp
