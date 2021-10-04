@@ -11,9 +11,10 @@ from . import Policy
 def blacklist():
     digests = set()
     with open(current_app.config["REMANDZANA_AHMIA_LOCATION"]) as fp:
-        line = fp.readline().strip()
-        if line:
-            digests.add(bytes.fromhex(line))
+        for line in fp.readlines():
+            line = line.strip()
+            if line:
+                digests.add(bytes.fromhex(line))
     return digests
 
 
